@@ -1,0 +1,26 @@
+Sub ImportCSVandCreatePivotTable()
+    'Import the CSV file into Power Query
+    Dim filePath As String
+    filePath = "C:\path\to\your\file.csv"
+    With ActiveWorkbook.Queries.Add(Name:="Data", Formula:= _
+        "let" & Chr(13) & "" & Chr(10) & "    Source = Csv.Document(File.Contents(""" & filePath & """),[Delimiter="","", Columns=16, Encoding=1252, QuoteStyle=QuoteStyle.None])," & Chr(13) & "" & Chr(10) & "    #" & ...
+    
+    'Transform the data
+    'Divide 0.9 to a specific column
+    let
+        Source = Data,
+        #"Divide 0.9" = Table.TransformColumns(Source,{{"Column1", each _ / 0.9, type number}})
+    in
+        #"Divide 0.9"
+    
+    'Add code here to filter the data as needed
+    
+    'Create a PivotTable
+    Dim pt As PivotTable
+    Set pt = ActiveSheet.PivotTableWizard()
+    With pt
+        .PivotFields("Field1").Orientation = xlRowField
+        .PivotFields("Field2").Orientation = xlDataField
+        'Add more fields as needed
+    End With
+End Sub
